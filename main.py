@@ -1,6 +1,6 @@
 import pygame
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from event_emitter import EventEmitter
+from eventemitter import EventEmitter
 import os
 
 def main():
