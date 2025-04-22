@@ -1,5 +1,5 @@
 import pygame
-from constants import SCREEN_WIDTH, SCREEN_HEIGHT
+from constants import COLOUR_BLACK, SCREEN_WIDTH, SCREEN_HEIGHT
 from eventemitter import EventEmitter
 import os
 
@@ -30,7 +30,7 @@ def game_loop(surface: pygame.Surface):
         delta_time = ticker.tick(60) / 1000 # 60 frames per second
 
 def render_background(surface: pygame.Surface):
-    surface.fill(pygame.Color([0,0,0,0]))
+    surface.fill(COLOUR_BLACK)
     
 
 def draw():
