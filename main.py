@@ -1,6 +1,8 @@
 import pygame
 import os
 
+from pygame.sprite import Group
+
 from constants import COLOUR_BLACK, SCREEN_WIDTH, SCREEN_HEIGHT
 from eventemitter import EventEmitter
 from player import Player
@@ -19,20 +21,22 @@ def main():
         game_running = False
     EventEmitter.default.on(pygame.QUIT, on_quit)
 
+    updatables, drawables = setup_groups()
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
     ticker = pygame.time.Clock()
-    delta_time = 0
+    delta_time = 0.0 # in seconds
 
     while game_running:
         process_events()
+        updatables.update(delta_time)
         fill_background(screen)
-        player.draw(screen)
+        for drawable in drawables:
+            drawable.draw(screen)
         update_screen()
         delta_time = ticker.tick(60) / 1000 # 60 frames per second
 
 def fill_background(surface: pygame.Surface):
     surface.fill(COLOUR_BLACK)
-    
 
 def update_screen():
     pygame.display.flip()
@@ -41,6 +45,14 @@ def process_events():
     for event in pygame.event.get():
         EventEmitter.default.emit(event.type, event)
 
+# returns updateable and drawable, in that order
+def setup_groups() -> tuple[pygame.sprite.Group, pygame.sprite.Group]:
+    updatable, drawable = pygame.sprite.Group(), pygame.sprite.Group()
+    
+    # add groups to relevant classes
+    Player.containers = (updatable, drawable)
+
+    return updatable, drawable
 
 
 if __name__ == "__main__":

@@ -1,22 +1,25 @@
-import pygame
+from pygame import Surface
+from pygame.math import Vector2
+from pygame.sprite import Group, Sprite
 
-class CircleShape(pygame.sprite.Sprite):
+class CircleShape(Sprite):
+    containers: tuple[Group, ...]
+
     def __init__(self, x, y, radius):
-        self.containers: list[pygame.sprite.Group] = []
 
         if hasattr(self, "containers"):
             super().__init__(*self.containers)
         else:
             super().__init__()
 
-        self.position = pygame.math.Vector2(x, y)
-        self.velocity = pygame.math.Vector2(x, y)
-        self.radius = radius
+        self.position: Vector2 = Vector2(x, y)
+        self.velocity: Vector2 = Vector2(0, 0)
+        self.radius: float = radius
     
        
-    def draw(self, screen: pygame.Surface):
+    def draw(self, screen: Surface):
         pass
 
     # delta_time is in seconds
-    def update(self, delta_time: int):
+    def update(self, delta_time: float):
         pass
