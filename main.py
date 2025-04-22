@@ -13,6 +13,8 @@ def main():
     game_loop(screen)
 
 def game_loop(surface: pygame.Surface):
+    ticker = pygame.time.Clock()
+    delta_time = 0
     game_running = True
 
     def on_quit(_event):
@@ -25,6 +27,7 @@ def game_loop(surface: pygame.Surface):
         process_events()
         render_background(surface)
         draw()
+        delta_time = ticker.tick(60) / 1000 # 60 frames per second
 
 def render_background(surface: pygame.Surface):
     surface.fill(pygame.Color([0,0,0,0]))
