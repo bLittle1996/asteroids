@@ -39,7 +39,7 @@ def main():
                 game_running = False
             for bullet in bullets:
                 if asteroid.is_colliding(bullet):
-                    asteroid.kill()
+                    asteroid.split()
                     bullet.kill()
 
         # draws

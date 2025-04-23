@@ -9,6 +9,7 @@ from constants import COLOUR_WHITE, ASTEROID_KINDS, ASTEROID_MAX_RADIUS, ASTEROI
 
 class Asteroid(CircleShape):
     LINE_WIDTH = 2
+    MIN_SIZE = 1
 
     def __init__(self, x, y, radius) -> None:
         super().__init__(x, y, radius)
@@ -18,6 +19,24 @@ class Asteroid(CircleShape):
 
     def update(self, delta_time: float) -> None:
         self.position += self.velocity * delta_time
+
+    def get_size(self) -> int:
+        return max(self.MIN_SIZE, int(self.radius // ASTEROID_MIN_RADIUS))
+
+    def split(self) -> None:
+        self.kill()
+        if self.get_size() == self.MIN_SIZE:
+            return
+        # spawn two asteroids shooting off in random angles of one size tier lower
+        new_size = (self.get_size() - 1) * ASTEROID_MIN_RADIUS
+        new_angle = random.uniform(15, 45)
+        speed_mod = 1.2 # smaller ones go faster of course!
+        left_a = Asteroid(self.position.x, self.position.y, new_size)
+        right_a = Asteroid(self.position.x, self.position.y, new_size)
+        left_a.velocity = self.velocity.rotate(-new_angle) * speed_mod
+        right_a.velocity = self.velocity.rotate(new_angle) * speed_mod
+        
+            
         
 
 
