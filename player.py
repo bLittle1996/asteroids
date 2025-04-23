@@ -36,24 +36,28 @@ class Player(CircleShape):
             bullet = Bullet(tippy_top_of_ship.x, tippy_top_of_ship.y)
             bullet.velocity = bullet.velocity.rotate(self.rotation) + self.velocity
             self.shot_cooldown = 1 / PLAYER_SHOOT_RATE # shots per second
-        else:
-            self.shot_cooldown -= delta_time
 
+    def tick_cooldowns(self, delta_time: float) -> None:
+        self.shot_cooldown -= delta_time;
 
     def update(self, delta_time: float):
         keys = pygame.key.get_pressed()
+        self.tick_cooldowns(delta_time)
 
         if keys[K_a] or keys[K_LEFT]:
             self.rotation += -PLAYER_ROTATION_SPEED * delta_time
         if keys[K_d] or keys[K_RIGHT]:
             self.rotation += PLAYER_ROTATION_SPEED * delta_time
         if keys[K_w] or keys[K_UP]:
-           self.move(delta_time)
+            self.move(delta_time)
         if keys[K_s] or keys[K_DOWN]:
-           self.move(delta_time)
+            self.move(delta_time)
         if keys[K_SPACE]:
             self.shoot(delta_time)
 
+
+        
+    
 
     def get_forwards_unit_vector(self) -> Vector2:
         return Vector2(0, 1).rotate(self.rotation)
