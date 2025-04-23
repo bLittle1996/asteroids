@@ -3,6 +3,7 @@ import os
 
 from pygame.sprite import Group
 
+from asteroid import Asteroid, AsteroidField
 from constants import COLOUR_BLACK, SCREEN_WIDTH, SCREEN_HEIGHT
 from eventemitter import EventEmitter
 from player import Player
@@ -21,8 +22,9 @@ def main():
         game_running = False
     EventEmitter.default.on(pygame.QUIT, on_quit)
 
-    updatables, drawables = setup_groups()
+    updatables, drawables, asteroids = setup_groups()
     player = Player(SCREEN_WIDTH / 2, SCREEN_HEIGHT / 2)
+    asteroid_field = AsteroidField()
     ticker = pygame.time.Clock()
     delta_time = 0.0 # in seconds
 
@@ -46,13 +48,16 @@ def process_events():
         EventEmitter.default.emit(event.type, event)
 
 # returns updateable and drawable, in that order
-def setup_groups() -> tuple[pygame.sprite.Group, pygame.sprite.Group]:
+def setup_groups() -> tuple[pygame.sprite.Group, pygame.sprite.Group, pygame.sprite.Group]:
     updatable, drawable = pygame.sprite.Group(), pygame.sprite.Group()
+    asteroids = pygame.sprite.Group()
     
     # add groups to relevant classes
     Player.containers = (updatable, drawable)
+    Asteroid.containers = (asteroids, updatable, drawable)
+    AsteroidField.containers = (updatable,)
 
-    return updatable, drawable
+    return updatable, drawable, asteroids
 
 
 if __name__ == "__main__":

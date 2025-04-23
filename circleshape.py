@@ -17,9 +17,9 @@ class CircleShape(Sprite):
         self.radius: float = radius
     
        
-    def draw(self, screen: Surface):
+    def draw(self, screen: Surface) -> None:
         pass
 
     # delta_time is in seconds
-    def update(self, delta_time: float):
+    def update(self, delta_time: float) -> None:
         pass

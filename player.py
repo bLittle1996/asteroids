@@ -1,5 +1,5 @@
 import pygame
-from pygame.constants import K_a, K_d, K_s, K_w
+from pygame.constants import K_DOWN, K_LEFT, K_RIGHT, K_UP, K_a, K_d, K_s, K_w
 from pygame.math import Vector2
 from circleshape import CircleShape
 from constants import COLOUR_WHITE, PLAYER_RADIUS, PLAYER_ROTATION_SPEED, PLAYER_SPEED
@@ -31,13 +31,13 @@ class Player(CircleShape):
     def update(self, delta_time: float):
         keys = pygame.key.get_pressed()
 
-        if keys[K_a]:
+        if keys[K_a] or keys[K_LEFT]:
             self.rotation += -PLAYER_ROTATION_SPEED * delta_time
-        if keys[K_d]:
+        if keys[K_d] or keys[K_RIGHT]:
             self.rotation += PLAYER_ROTATION_SPEED * delta_time
-        if keys[K_w]:
+        if keys[K_w] or keys[K_UP]:
            self.move(delta_time)
-        if keys[K_s]:
+        if keys[K_s] or keys[K_DOWN]:
            self.move(delta_time)
 
 
