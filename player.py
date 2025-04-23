@@ -1,8 +1,9 @@
 import pygame
-from pygame.constants import K_DOWN, K_LEFT, K_RIGHT, K_UP, K_a, K_d, K_s, K_w
+from pygame.constants import K_DOWN, K_LEFT, K_RIGHT, K_SPACE, K_UP, K_a, K_d, K_s, K_w
 from pygame.math import Vector2
+from bullet import Bullet
 from circleshape import CircleShape
-from constants import COLOUR_WHITE, PLAYER_RADIUS, PLAYER_ROTATION_SPEED, PLAYER_SPEED
+from constants import COLOUR_WHITE, PLAYER_RADIUS, PLAYER_ROTATION_SPEED, PLAYER_SHOOT_RATE, PLAYER_SPEED
 
 class Player(CircleShape):
     TRIANGLE_LINE_WIDTH = 2
@@ -11,6 +12,7 @@ class Player(CircleShape):
     def __init__(self, x, y):
         super().__init__(x, y, PLAYER_RADIUS)
         self.rotation: float = 0
+        self.shot_cooldown = 0.0 # seconds
     
     def triangle(self) -> list[Vector2]:
         forward: Vector2 = Vector2(0, 1).rotate(self.rotation) * self.radius 
@@ -28,6 +30,16 @@ class Player(CircleShape):
         self.velocity = Vector2(0, 1).rotate(self.rotation) * PLAYER_SPEED * delta_time
         self.position += self.velocity
 
+    def shoot(self, delta_time: float):
+        if self.shot_cooldown <= 0:
+            tippy_top_of_ship = self.position + Vector2(0, 1).rotate(self.rotation) * self.radius
+            bullet = Bullet(tippy_top_of_ship.x, tippy_top_of_ship.y)
+            bullet.velocity = bullet.velocity.rotate(self.rotation) + self.velocity
+            self.shot_cooldown = 1 / PLAYER_SHOOT_RATE # shots per second
+        else:
+            self.shot_cooldown -= delta_time
+
+
     def update(self, delta_time: float):
         keys = pygame.key.get_pressed()
 
@@ -39,6 +51,8 @@ class Player(CircleShape):
            self.move(delta_time)
         if keys[K_s] or keys[K_DOWN]:
            self.move(delta_time)
+        if keys[K_SPACE]:
+            self.shoot(delta_time)
 
 
     def get_forwards_unit_vector(self) -> Vector2:
